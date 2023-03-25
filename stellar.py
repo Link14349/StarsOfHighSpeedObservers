@@ -91,9 +91,9 @@ else:
     N = int(input()) # frame count
     print("Generating...")
     stellar.newVideo(800, 0, eb)
-    b = math.sqrt(1 - eb ** 2) / eb * float(N)
+    b = math.atanh(eb) / (N - 1)
     for i in range(0, N):
-        beta = i / math.sqrt(b ** 2 + i ** 2)
+        beta = math.tanh(b * i)
         print("Generating frame#%d, beta=%.2f" % (i, beta))
         stellar.addFrame(beta)
     stellar.save()
