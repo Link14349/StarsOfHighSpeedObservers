@@ -62,8 +62,8 @@ class Stellar:
             self.output.save("view[%.1fdegree, radius=%dpx]-%.2fc.jpg" % (self.view, self.radius, self.beta))
             print("Saved as view[%.1fdegree, radius=%dpx]-%.2fc.jpg" % (self.view, self.radius, self.beta))
         else:
-            self.video[0].save('view[%fdegree, radius=%dpx]-[%.2f, %.2f]c.gif' % (self.view, self.radius, self.sb, self.eb), save_all = True, append_images = self.video[1:], optimize = False, duration = 10)
-            print("Saved as view[%fdegree, radius=%dpx]-[%.2f, %.2f]c.gif" % (self.view, self.radius, self.sb, self.eb))
+            self.video[0].save('view[%.1fdegree, radius=%dpx]-[%.2f, %.2f]c.gif' % (self.view, self.radius, self.sb, self.eb), save_all = True, append_images = self.video[1:], optimize = False, duration = 10)
+            print("Saved as view[%.1fdegree, radius=%dpx]-[%.2f, %.2f]c.gif" % (self.view, self.radius, self.sb, self.eb))
 # print(img.width, img.height)
 
 # radius = 1000
@@ -73,16 +73,27 @@ if t == "image":
     print("Generating...")
     beta = float(input())
     stellar.transform(800, beta, 90)
-else:
+elif t == "linear":
     sb = float(input())
     eb = float(input())
     st = float(input())
     print("Generating...")
     stellar.newVideo(800, sb, eb)
     b, i = sb, 0
-    while b <= eb:
+    while b < eb:
         print("Generating frame#%d, beta=%.2f" % (i, b))
         stellar.addFrame(b)
         b += st
         i += 1
+    stellar.save()
+else:
+    eb = float(input())
+    N = int(input()) # frame count
+    print("Generating...")
+    stellar.newVideo(800, 0, eb)
+    b = math.sqrt(1 - eb ** 2) / eb * float(N)
+    for i in range(0, N):
+        beta = i / math.sqrt(b ** 2 + i ** 2)
+        print("Generating frame#%d, beta=%.2f" % (i, beta))
+        stellar.addFrame(beta)
     stellar.save()
